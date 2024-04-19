@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { queryValue, queryOptions } from "./QueryData";
 import OptionList from "./OptionList/OptionList";
 import CATEGORIES from "./Categories";
+import HistoryTracker from './HistoryBar';
 
 interface CurrentCategory {
   title: string;
@@ -16,7 +17,7 @@ interface GameUIProps {
   initOptions: string[];
 }
 
-interface GameState {
+export type GameState = {
   currentItem: string;
   currentCategory: CurrentCategory;
   options: string[];
@@ -117,7 +118,7 @@ const GameUI: React.FC<GameUIProps> = ({
     loopCount: 0,
     history: [initItem],
   };
-
+  
   const [isClient, setIsClient] = useState(false);
   const [gameState, setActiveGameState] = useState<GameState>(initState);
   const [isLoading, setIsLoading] = useState(false);
@@ -135,9 +136,10 @@ const GameUI: React.FC<GameUIProps> = ({
     `You have ${gameState.currentItem}. `,
     `Select an item to trade for:`,
   ];
+  const getHistory = () => gameState.history;
 
   return (
-    <div className="font-mono text-sm text-slate-900">
+    <div className="flex flex-col pt-24 px-12 min-h-screen items-center justify-between font-mono text-sm text-slate-900">
       <div className="z-10 max-w-lg ">
         <p className="static w-auto my-10 p-4 border-b border-gray-400">
           {dialogue.map((txt, i) => (
@@ -164,6 +166,7 @@ const GameUI: React.FC<GameUIProps> = ({
       >
         Reset
       </button>
+      <HistoryTracker history={gameState.history} />
     </div>
   );
 };
